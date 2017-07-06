@@ -141,7 +141,7 @@ func (s *objectsService) GetNetworkServiceGroup(name string) (*NetworkServiceGro
 
 // UpdateNetworkServiceGroup updates a network service group.
 func (s *objectsService) UpdateNetworkServiceGroup(name, description string, members []string) (*NetworkServiceGroup, error) {
-	u := fmt.Sprintf("/api/objects/networkobjectgroups/%s", name)
+	u := fmt.Sprintf("/api/objects/networkservicegroups/%s", name)
 
 	n := NetworkServiceGroup{
 		Name:        name,

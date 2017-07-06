@@ -71,16 +71,16 @@ func (s *objectsService) objectFromService(service string) (*ServiceObject, erro
 	o := &ServiceObject{}
 	parts := strings.SplitN(service, "/", 2)
 
-	if len(parts) == 2 && parts[1] != "" && !regexpPorts.MatchString(parts[1]) {
+	if len(parts) == 1 && !regexpPorts.MatchString(parts[0]) {
 		// Test if the service is referencing a network service.
-		if n, err := s.GetNetworkService(parts[1]); err == nil {
+		if n, err := s.GetNetworkService(parts[0]); err == nil {
 			o.Kind = strings.Replace(n.Kind, "object#", "objectRef#", 1)
 			o.ObjectID = n.ObjectID
 			return o, nil
 		}
 
 		// Test is the service is referencing a network service group.
-		if n, err := s.GetNetworkServiceGroup(parts[1]); err == nil {
+		if n, err := s.GetNetworkServiceGroup(parts[0]); err == nil {
 			o.Kind = strings.Replace(n.Kind, "object#", "objectRef#", 1)
 			o.ObjectID = n.ObjectID
 			return o, nil
