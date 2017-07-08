@@ -45,6 +45,7 @@ func (ip *IPAddress) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, (*alias)(ip)); err != nil {
 		ip = nil
 	}
+
 	return nil
 }
 
@@ -81,5 +82,6 @@ func (ip *IPv6Info) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, (*alias)(ip)); err != nil {
 		ip = nil
 	}
+
 	return nil
 }
