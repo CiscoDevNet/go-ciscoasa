@@ -16,28 +16,20 @@
 
 package ciscoasa
 
-// PhysicalInterfaceCollection represents a collection of physical interfaces.
-type PhysicalInterfaceCollection struct {
+// VlanInterfaceCollection represents a collection of vlan interfaces.
+type VlanInterfaceCollection struct {
 	RangeInfo RangeInfo    `json:"rangeInfo"`
-	Items     []*PhysicalInterface `json:"items"`
+	Items     []*VlanInterface `json:"items"`
 	Kind      string       `json:"kind"`
 	SelfLink  string       `json:"selfLink"`
 }
 
-// Interface represents an interface.
-type PhysicalInterface struct {
+// VlanInterface represents an vlan interface.
+type VlanInterface struct {
 	HardwareID        string     `json:"hardwareID"`
 	InterfaceDesc     string     `json:"interfaceDesc"`
-	ChannelGroupID    string     `json:"channelGroupID"`
-	ChannelGroupMode  string     `json:"channelGroupMode"`
-	Duplex            string     `json:"duplex"`
-	FlowcontrolOn     bool       `json:"flowcontrolOn"`
-	FlowcontrolHigh   int        `json:"flowcontrolHigh"`
-	FlowcontrolLow    int        `json:"flowcontrolLow"`
-	FlowcontrolPeriod int        `json:"flowcontrolPeriod"`
 	ForwardTrafficCX  bool       `json:"forwardTrafficCX"`
 	ForwardTrafficSFR bool       `json:"forwardTrafficSFR"`
-	LacpPriority      int        `json:"lacpPriority"`
 	ActiveMacAddress  string     `json:"activeMacAddress"`
 	StandByMacAddress string     `json:"standByMacAddress"`
 	ManagementOnly    bool       `json:"managementOnly"`
@@ -45,7 +37,7 @@ type PhysicalInterface struct {
 	Name              string     `json:"name"`
 	SecurityLevel     int        `json:"securityLevel"`
 	Shutdown          bool       `json:"shutdown"`
-	Speed             string     `json:"speed"`
+	VlanID            int        `json:"vlanID"`
 	IPAddress         *IPAddress `json:"ipAddress"`
 	Ipv6Info          *IPv6Info  `json:"ipv6Info"`
 	Kind              string     `json:"kind"`
@@ -54,15 +46,15 @@ type PhysicalInterface struct {
 }
 
 // ListPhysicalInterfaces returns a collection of interfaces.
-func (s *interfaceService) ListPhysicalInterfaces() (*PhysicalInterfaceCollection, error) {
-	u := "/api/interfaces/physical"
+func (s *interfaceService) ListVlanInterfaces() (*VlanInterfaceCollection, error) {
+	u := "/api/interfaces/vlan"
 
 	req, err := s.newRequest("GET", u, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	e := &PhysicalInterfaceCollection{}
+	e := &VlanInterfaceCollection{}
 	_, err = s.do(req, e)
 
 	return e, err
