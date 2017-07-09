@@ -45,7 +45,7 @@ type VlanInterface struct {
 	SelfLink          string     `json:"selfLink"`
 }
 
-// ListPhysicalInterfaces returns a collection of interfaces.
+// ListVlanInterfaces returns a collection of interfaces.
 func (s *interfaceService) ListVlanInterfaces() (*VlanInterfaceCollection, error) {
 	u := "/api/interfaces/vlan"
 

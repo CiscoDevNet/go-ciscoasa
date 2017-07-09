@@ -16,7 +16,11 @@
 
 package ciscoasa
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"net"
+	"strconv"
+)
 
 type interfaceService struct {
 	*Client
@@ -42,6 +46,14 @@ func (ip *IPAddress) UnmarshalJSON(b []byte) error {
 		ip = nil
 	}
 	return nil
+}
+
+func (i *IPAddress) String() string {
+	n := net.IPMask(net.ParseIP(i.NetMask.Value).To4())
+	b, _ := n.Size()
+	bitsize := strconv.Itoa(b)
+
+	return i.IP.Value + "/" + bitsize
 }
 
 // IPv6Info represents an IPv6 address.
