@@ -69,6 +69,7 @@ func TestKindFromValue(t *testing.T) {
 		err  bool
 	}{
 		{"192.168.10.15", "IPv4Address", false},
+		{"192.168.10.10/32","IPv4Address", false},
 		{"192.168.10.0/24", "IPv4Network", false},
 		{"192.168.10.10-192.168.10.15", "IPv4Range", false},
 		{"FE80::0202:B3FF:FE1E:8329", "IPv6Address", false},

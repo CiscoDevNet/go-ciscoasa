@@ -52,6 +52,12 @@ func (o *AddressObject) String() string {
 	if strings.HasPrefix(o.Kind, "objectRef#") {
 		return o.ObjectID
 	}
+	if strings.Contains(o.Kind, "IPv4Address") {
+		return o.Value + "/32"
+	}
+	if strings.Contains(o.Kind, "IPv6Address") {
+		return o.Value + "/128"
+	}
 	return o.Value
 }
 

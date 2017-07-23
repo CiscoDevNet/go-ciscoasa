@@ -78,3 +78,28 @@ func TestObjectFromService(t *testing.T) {
 		t.Errorf("Wrong values while createing Service object, expected 'tcp/443' and 'TcpUdpService', got %s and %s", o.Value, o.Kind)
 	}
 }
+
+func TestObjectFromAddress(t *testing.T) {
+	mux, server, client := setup()
+	defer teardown(server)
+
+	mux.HandleFunc("/api/objects/networkobjects/some_host", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{
+  			"kind": "object#NetworkObj",
+  			"selfLink": "https://localhost/api/objects/networkobjects/some_host",
+  			"name": "some_host",
+  			"host": {
+  			  "kind": "IPv4Address",
+  			  "value": "10.10.18.35"
+  			},
+			"objectId": "some_host"
+		}`)
+	})
+
+	_, err := client.Objects.objectFromAddress("192.168.10.0/24")
+	if err != nil {
+		t.Errorf("Failed to create AddressObject for address '192.168.10.0/24': %s", err)
+	}
+
+}

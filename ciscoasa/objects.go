@@ -55,6 +55,13 @@ func (s *objectsService) objectFromAddress(address string) (*AddressObject, erro
 		}
 		o.Kind = k
 		o.Value = address
+		if o.Kind == "IPv4Address" {
+			o.Value = strings.TrimSuffix(o.Value, "/32")
+		}
+		if o.Kind == "IPv46ddress" {
+			o.Value = strings.TrimSuffix(o.Value, "/128")
+		}
+
 		return o, nil
 	}
 

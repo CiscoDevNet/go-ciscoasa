@@ -223,15 +223,21 @@ func kindFromValue(value string) (string, error) {
 
 	// Test if the value specifies a CIDR.
 	if strings.Contains(value, "/") {
-		addr, _, err := net.ParseCIDR(value)
+		addr, ipnet, err := net.ParseCIDR(value)
 		if err != nil {
 			return "", fmt.Errorf("value is not a valid CIDR: %v", err)
 		}
-
+		masklen, _ := ipnet.Mask.Size()
 		if addr.To4() != nil {
+			if masklen == 32 {
+				return "IPv4Address", nil
+			}
 			return "IPv4Network", nil
 		}
 		if addr.To16() != nil {
+			if masklen == 128 {
+				return "IPv6Address", nil
+			}
 			return "IPv6Network", nil
 		}
 
