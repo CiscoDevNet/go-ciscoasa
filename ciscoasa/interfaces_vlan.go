@@ -18,10 +18,10 @@ package ciscoasa
 
 // VlanInterfaceCollection represents a collection of vlan interfaces.
 type VlanInterfaceCollection struct {
-	RangeInfo RangeInfo    `json:"rangeInfo"`
+	RangeInfo RangeInfo        `json:"rangeInfo"`
 	Items     []*VlanInterface `json:"items"`
-	Kind      string       `json:"kind"`
-	SelfLink  string       `json:"selfLink"`
+	Kind      string           `json:"kind"`
+	SelfLink  string           `json:"selfLink"`
 }
 
 // VlanInterface represents an vlan interface.

@@ -48,12 +48,12 @@ func (ip *IPAddress) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (i *IPAddress) String() string {
-	n := net.IPMask(net.ParseIP(i.NetMask.Value).To4())
+func (ip *IPAddress) String() string {
+	n := net.IPMask(net.ParseIP(ip.NetMask.Value).To4())
 	b, _ := n.Size()
 	bitsize := strconv.Itoa(b)
 
-	return i.IP.Value + "/" + bitsize
+	return ip.IP.Value + "/" + bitsize
 }
 
 // IPv6Info represents an IPv6 address.

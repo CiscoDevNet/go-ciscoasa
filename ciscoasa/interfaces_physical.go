@@ -18,10 +18,10 @@ package ciscoasa
 
 // PhysicalInterfaceCollection represents a collection of physical interfaces.
 type PhysicalInterfaceCollection struct {
-	RangeInfo RangeInfo    `json:"rangeInfo"`
+	RangeInfo RangeInfo            `json:"rangeInfo"`
 	Items     []*PhysicalInterface `json:"items"`
-	Kind      string       `json:"kind"`
-	SelfLink  string       `json:"selfLink"`
+	Kind      string               `json:"kind"`
+	SelfLink  string               `json:"selfLink"`
 }
 
 // Interface represents an interface.
