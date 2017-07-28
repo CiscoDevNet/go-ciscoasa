@@ -19,7 +19,6 @@ package ciscoasa
 import (
 	"errors"
 	"fmt"
-	"net"
 )
 
 type routingService struct {
@@ -72,13 +71,6 @@ func (s *routingService) CreateStaticRoute(iface, network, gateway string, metri
 
 	if metric < 1 || metric > 255 {
 		return "", errors.New("metric must be between 0 and 255")
-	}
-
-	// Confirm that the gateway specifies an IP address before trying to
-	// create an AddressObject from the given value.
-	addr := net.ParseIP(gateway)
-	if addr == nil {
-		return "", fmt.Errorf("gateway must be an IP address")
 	}
 
 	gatewayObject, err := s.Objects.objectFromAddress(gateway)
@@ -137,13 +129,6 @@ func (s *routingService) UpdateStaticRoute(routeID, iface, network, gateway stri
 
 	if metric < 1 || metric > 255 {
 		return "", errors.New("metric must be between 0 and 255")
-	}
-
-	// Confirm that the gateway specifies an IP address before trying to
-	// create an AddressObject from the given value.
-	addr := net.ParseIP(gateway)
-	if addr == nil {
-		return "", fmt.Errorf("gateway must be an IP address")
 	}
 
 	gatewayObject, err := s.Objects.objectFromAddress(gateway)
