@@ -33,18 +33,17 @@ func TestCreateNetworkServiceGroup(t *testing.T) {
 			"name": "28ec2bb3",
 			"members": []interface{}{
 				map[string]interface{}{
-					"kind": "TcpUdpService",
+					"kind":  "TcpUdpService",
 					"value": "tcp/2121",
 				},
 				map[string]interface{}{
-					"kind": "TcpUdpService",
+					"kind":  "TcpUdpService",
 					"value": "udp/123",
 				},
 				map[string]interface{}{
-					"kind": "TcpUdpService",
+					"kind":  "TcpUdpService",
 					"value": "tcp/https",
 				},
-
 			},
 		})
 
