@@ -16,6 +16,8 @@
 
 package ciscoasa
 
+import "fmt"
+
 // PhysicalInterfaceCollection represents a collection of physical interfaces.
 type PhysicalInterfaceCollection struct {
 	RangeInfo RangeInfo            `json:"rangeInfo"`
@@ -55,15 +57,31 @@ type PhysicalInterface struct {
 
 // ListPhysicalInterfaces returns a collection of interfaces.
 func (s *interfaceService) ListPhysicalInterfaces() (*PhysicalInterfaceCollection, error) {
-	u := "/api/interfaces/physical"
+	result := &PhysicalInterfaceCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/interfaces/physical", s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		e := &PhysicalInterfaceCollection{}
+		_, err = s.do(req, e)
+
+		result.RangeInfo = e.RangeInfo
+		result.Items = append(result.Items, e.Items...)
+		result.Kind = e.Kind
+		result.SelfLink = e.SelfLink
+
+		if e.RangeInfo.Offset+e.RangeInfo.Limit == e.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	e := &PhysicalInterfaceCollection{}
-	_, err = s.do(req, e)
-
-	return e, err
+	return result, err
 }

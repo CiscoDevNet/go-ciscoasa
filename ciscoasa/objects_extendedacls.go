@@ -67,32 +67,65 @@ type RuleLogging struct {
 
 // ListExtendedACLs returns a collection of access control list objects.
 func (s *objectsService) ListExtendedACLs() (*ExtendedACLObjectCollection, error) {
-	u := "/api/objects/extendedacls"
+	result := &ExtendedACLObjectCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+
+		u := fmt.Sprintf("/api/objects/extendedacls?limit=%d&offset=%d", s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		e := &ExtendedACLObjectCollection{}
+		_, err = s.do(req, e)
+
+		result.RangeInfo = e.RangeInfo
+		result.Items = append(result.Items, e.Items...)
+		result.Kind = e.Kind
+		result.SelfLink = e.SelfLink
+
+		if e.RangeInfo.Offset+e.RangeInfo.Limit == e.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	e := &ExtendedACLObjectCollection{}
-	_, err = s.do(req, e)
-
-	return e, err
+	return result, err
 }
 
 // ListExtendedACLACEs returns a collection of access control element objects.
 func (s *objectsService) ListExtendedACLACEs(aclName string) (*ExtendedACEObjectCollection, error) {
-	u := fmt.Sprintf("/api/objects/extendedacls/%s/aces", aclName)
+	result := &ExtendedACEObjectCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/objects/extendedacls/%s/aces?limit=%d&offset=%d", aclName, s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		e := &ExtendedACEObjectCollection{}
+		_, err = s.do(req, e)
+
+		result.RangeInfo = e.RangeInfo
+		result.Items = append(result.Items, e.Items...)
+		result.Kind = e.Kind
+		result.SelfLink = e.SelfLink
+
+		if e.RangeInfo.Offset+e.RangeInfo.Limit == e.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	e := &ExtendedACEObjectCollection{}
-	_, err = s.do(req, e)
-
-	return e, err
+	return result, err
 }
 
 // CreateExtendedACLACE creates an access control element.

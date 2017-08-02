@@ -41,17 +41,33 @@ type NetworkObject struct {
 
 // ListNetworkObjects returns a collection of network objects.
 func (s *objectsService) ListNetworkObjects() (*NetworkObjectCollection, error) {
-	u := "/api/objects/networkobjects"
+	result := &NetworkObjectCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/objects/networkobjects?limit=%d&offset=%d", s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		n := &NetworkObjectCollection{}
+		_, err = s.do(req, n)
+
+		result.RangeInfo = n.RangeInfo
+		result.Items = append(result.Items, n.Items...)
+		result.Kind = n.Kind
+		result.SelfLink = n.SelfLink
+
+		if n.RangeInfo.Offset+n.RangeInfo.Limit == n.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	n := &NetworkObjectCollection{}
-	_, err = s.do(req, n)
-
-	return n, err
+	return result, err
 }
 
 // CreateNetworkObject creates a new network object.

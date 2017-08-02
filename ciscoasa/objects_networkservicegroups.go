@@ -75,17 +75,33 @@ func (o *ServiceObject) String() string {
 
 // ListNetworkServiceGroups returns a collection of network service groups.
 func (s *objectsService) ListNetworkServiceGroups() (*NetworkServiceGroupCollection, error) {
-	u := "/api/objects/networkservicegroups"
+	result := &NetworkServiceGroupCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/objects/networkservicegroups?limit=%d&offset=%d", s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		n := &NetworkServiceGroupCollection{}
+		_, err = s.do(req, n)
+
+		result.RangeInfo = n.RangeInfo
+		result.Items = append(result.Items, n.Items...)
+		result.Kind = n.Kind
+		result.SelfLink = n.SelfLink
+
+		if n.RangeInfo.Offset+n.RangeInfo.Limit == n.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	n := &NetworkServiceGroupCollection{}
-	_, err = s.do(req, n)
-
-	return n, err
+	return result, err
 }
 
 // CreateNetworkServiceGroup creates a new network service group.

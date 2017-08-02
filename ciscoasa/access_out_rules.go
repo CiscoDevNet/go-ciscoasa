@@ -20,17 +20,33 @@ import "fmt"
 
 // ListAccessOutRules returns a collection of access control element objects.
 func (s *accessService) ListAccessOutRules(iface string) (*ExtendedACEObjectCollection, error) {
-	u := fmt.Sprintf("/api/access/out/%s/rules", iface)
+	result := &ExtendedACEObjectCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/access/out/%s/rules?limit=%d&offset=%d", iface, s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		e := &ExtendedACEObjectCollection{}
+		_, err = s.do(req, e)
+
+		result.RangeInfo = e.RangeInfo
+		result.Items = append(result.Items, e.Items...)
+		result.Kind = e.Kind
+		result.SelfLink = e.SelfLink
+
+		if e.RangeInfo.Offset+e.RangeInfo.Limit == e.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	e := &ExtendedACEObjectCollection{}
-	_, err = s.do(req, e)
-
-	return e, err
+	return result, err
 }
 
 // CreateAccessOutRule creates an access control element.

@@ -57,17 +57,33 @@ func (o *AddressObject) String() string {
 
 // ListNetworkObjectGroups returns a collection of network object groups.
 func (s *objectsService) ListNetworkObjectGroups() (*NetworkObjectGroupCollection, error) {
-	u := "/api/objects/networkobjectgroups"
+	result := &NetworkObjectGroupCollection{}
+	page := 0
+	var err error
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/objects/networkobjectgroups?limit=%d&offset=%d", s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		n := &NetworkObjectGroupCollection{}
+		_, err = s.do(req, n)
+
+		result.RangeInfo = n.RangeInfo
+		result.Items = append(result.Items, n.Items...)
+		result.Kind = n.Kind
+		result.SelfLink = n.SelfLink
+
+		if n.RangeInfo.Offset+n.RangeInfo.Limit == n.RangeInfo.Total {
+			break
+		}
+		page++
 	}
-
-	n := &NetworkObjectGroupCollection{}
-	_, err = s.do(req, n)
-
-	return n, err
+	return result, err
 }
 
 // CreateNetworkObjectGroup creates a new network object group.
