@@ -63,7 +63,7 @@ func (s *interfaceService) ListPhysicalInterfaces() (*PhysicalInterfaceCollectio
 
 	for {
 		offset := page * s.pageLimit
-		u := fmt.Sprintf("/api/interfaces/physical", s.pageLimit, offset)
+		u := fmt.Sprintf("/api/interfaces/physical?limit=%d&offset=%d", s.pageLimit, offset)
 
 		req, err := s.newRequest("GET", u, nil)
 		if err != nil {
