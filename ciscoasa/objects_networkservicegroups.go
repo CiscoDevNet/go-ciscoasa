@@ -118,10 +118,6 @@ func (s *objectsService) CreateNetworkServiceGroup(name, description string, mem
 	}
 
 	for _, member := range members {
-		if !strings.Contains(member, "/") {
-			member = fmt.Sprintf("/%s", member)
-		}
-
 		o, err := s.objectFromService(member)
 		if err != nil {
 			return nil, err
@@ -169,10 +165,6 @@ func (s *objectsService) UpdateNetworkServiceGroup(name, description string, mem
 	}
 
 	for _, member := range members {
-		if !strings.Contains(member, "/") {
-			member = fmt.Sprintf("/%s", member)
-		}
-
 		o, err := s.objectFromService(member)
 		if err != nil {
 			return nil, err
