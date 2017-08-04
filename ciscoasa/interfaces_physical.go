@@ -59,7 +59,6 @@ type PhysicalInterface struct {
 func (s *interfaceService) ListPhysicalInterfaces() (*PhysicalInterfaceCollection, error) {
 	result := &PhysicalInterfaceCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -72,6 +71,9 @@ func (s *interfaceService) ListPhysicalInterfaces() (*PhysicalInterfaceCollectio
 
 		e := &PhysicalInterfaceCollection{}
 		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = e.RangeInfo
 		result.Items = append(result.Items, e.Items...)
@@ -83,5 +85,6 @@ func (s *interfaceService) ListPhysicalInterfaces() (*PhysicalInterfaceCollectio
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }

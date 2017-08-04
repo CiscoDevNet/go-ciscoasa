@@ -51,7 +51,6 @@ type VlanInterface struct {
 func (s *interfaceService) ListVlanInterfaces() (*VlanInterfaceCollection, error) {
 	result := &VlanInterfaceCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -64,6 +63,9 @@ func (s *interfaceService) ListVlanInterfaces() (*VlanInterfaceCollection, error
 
 		e := &VlanInterfaceCollection{}
 		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = e.RangeInfo
 		result.Items = append(result.Items, e.Items...)
@@ -75,5 +77,6 @@ func (s *interfaceService) ListVlanInterfaces() (*VlanInterfaceCollection, error
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }

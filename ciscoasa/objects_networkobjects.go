@@ -43,7 +43,6 @@ type NetworkObject struct {
 func (s *objectsService) ListNetworkObjects() (*NetworkObjectCollection, error) {
 	result := &NetworkObjectCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -56,6 +55,9 @@ func (s *objectsService) ListNetworkObjects() (*NetworkObjectCollection, error) 
 
 		n := &NetworkObjectCollection{}
 		_, err = s.do(req, n)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = n.RangeInfo
 		result.Items = append(result.Items, n.Items...)
@@ -67,7 +69,8 @@ func (s *objectsService) ListNetworkObjects() (*NetworkObjectCollection, error) 
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }
 
 // CreateNetworkObject creates a new network object.

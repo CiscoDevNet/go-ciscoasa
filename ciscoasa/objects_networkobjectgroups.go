@@ -59,7 +59,6 @@ func (o *AddressObject) String() string {
 func (s *objectsService) ListNetworkObjectGroups() (*NetworkObjectGroupCollection, error) {
 	result := &NetworkObjectGroupCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -72,6 +71,9 @@ func (s *objectsService) ListNetworkObjectGroups() (*NetworkObjectGroupCollectio
 
 		n := &NetworkObjectGroupCollection{}
 		_, err = s.do(req, n)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = n.RangeInfo
 		result.Items = append(result.Items, n.Items...)
@@ -83,7 +85,8 @@ func (s *objectsService) ListNetworkObjectGroups() (*NetworkObjectGroupCollectio
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }
 
 // CreateNetworkObjectGroup creates a new network object group.

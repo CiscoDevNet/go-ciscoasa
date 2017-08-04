@@ -22,7 +22,6 @@ import "fmt"
 func (s *accessService) ListAccessOutRules(iface string) (*ExtendedACEObjectCollection, error) {
 	result := &ExtendedACEObjectCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -35,6 +34,9 @@ func (s *accessService) ListAccessOutRules(iface string) (*ExtendedACEObjectColl
 
 		e := &ExtendedACEObjectCollection{}
 		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = e.RangeInfo
 		result.Items = append(result.Items, e.Items...)
@@ -46,7 +48,8 @@ func (s *accessService) ListAccessOutRules(iface string) (*ExtendedACEObjectColl
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }
 
 // CreateAccessOutRule creates an access control element.

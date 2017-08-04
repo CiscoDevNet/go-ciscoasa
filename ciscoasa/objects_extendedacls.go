@@ -69,7 +69,6 @@ type RuleLogging struct {
 func (s *objectsService) ListExtendedACLs() (*ExtendedACLObjectCollection, error) {
 	result := &ExtendedACLObjectCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -83,6 +82,9 @@ func (s *objectsService) ListExtendedACLs() (*ExtendedACLObjectCollection, error
 
 		e := &ExtendedACLObjectCollection{}
 		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = e.RangeInfo
 		result.Items = append(result.Items, e.Items...)
@@ -94,14 +96,14 @@ func (s *objectsService) ListExtendedACLs() (*ExtendedACLObjectCollection, error
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }
 
 // ListExtendedACLACEs returns a collection of access control element objects.
 func (s *objectsService) ListExtendedACLACEs(aclName string) (*ExtendedACEObjectCollection, error) {
 	result := &ExtendedACEObjectCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -114,6 +116,9 @@ func (s *objectsService) ListExtendedACLACEs(aclName string) (*ExtendedACEObject
 
 		e := &ExtendedACEObjectCollection{}
 		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = e.RangeInfo
 		result.Items = append(result.Items, e.Items...)
@@ -125,7 +130,8 @@ func (s *objectsService) ListExtendedACLACEs(aclName string) (*ExtendedACEObject
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }
 
 // CreateExtendedACLACE creates an access control element.

@@ -26,7 +26,6 @@ type accessService struct {
 func (s *accessService) ListAccessInRules(iface string) (*ExtendedACEObjectCollection, error) {
 	result := &ExtendedACEObjectCollection{}
 	page := 0
-	var err error
 
 	for {
 		offset := page * s.pageLimit
@@ -39,6 +38,9 @@ func (s *accessService) ListAccessInRules(iface string) (*ExtendedACEObjectColle
 
 		e := &ExtendedACEObjectCollection{}
 		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
 
 		result.RangeInfo = e.RangeInfo
 		result.Items = append(result.Items, e.Items...)
@@ -50,7 +52,8 @@ func (s *accessService) ListAccessInRules(iface string) (*ExtendedACEObjectColle
 		}
 		page++
 	}
-	return result, err
+
+	return result, nil
 }
 
 // CreateAccessInRule creates an access control element.
