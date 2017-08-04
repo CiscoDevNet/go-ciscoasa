@@ -16,6 +16,8 @@
 
 package ciscoasa
 
+import "fmt"
+
 // VlanInterfaceCollection represents a collection of vlan interfaces.
 type VlanInterfaceCollection struct {
 	RangeInfo RangeInfo        `json:"rangeInfo"`
@@ -47,15 +49,34 @@ type VlanInterface struct {
 
 // ListVlanInterfaces returns a collection of interfaces.
 func (s *interfaceService) ListVlanInterfaces() (*VlanInterfaceCollection, error) {
-	u := "/api/interfaces/vlan"
+	result := &VlanInterfaceCollection{}
+	page := 0
 
-	req, err := s.newRequest("GET", u, nil)
-	if err != nil {
-		return nil, err
+	for {
+		offset := page * s.pageLimit
+		u := fmt.Sprintf("/api/interfaces/vlan?limit=%d&offset=%d", s.pageLimit, offset)
+
+		req, err := s.newRequest("GET", u, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		e := &VlanInterfaceCollection{}
+		_, err = s.do(req, e)
+		if err != nil {
+			return nil, err
+		}
+
+		result.RangeInfo = e.RangeInfo
+		result.Items = append(result.Items, e.Items...)
+		result.Kind = e.Kind
+		result.SelfLink = e.SelfLink
+
+		if e.RangeInfo.Offset+e.RangeInfo.Limit == e.RangeInfo.Total {
+			break
+		}
+		page++
 	}
 
-	e := &VlanInterfaceCollection{}
-	_, err = s.do(req, e)
-
-	return e, err
+	return result, nil
 }

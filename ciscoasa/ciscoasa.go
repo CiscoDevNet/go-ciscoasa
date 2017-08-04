@@ -44,6 +44,7 @@ type Client struct {
 	username  string
 	password  string
 	authToken string
+	pageLimit int
 
 	Access     *accessService
 	Interfaces *interfaceService
@@ -105,9 +106,10 @@ func NewClient(apiURL, username, password string, sslNoVerify bool) (*Client, er
 			},
 			Timeout: 60 * time.Second,
 		},
-		baseURL:  baseURL,
-		username: username,
-		password: password,
+		baseURL:   baseURL,
+		username:  username,
+		password:  password,
+		pageLimit: 100,
 	}
 
 	c.Access = &accessService{c}
