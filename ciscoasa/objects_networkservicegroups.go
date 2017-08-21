@@ -58,14 +58,28 @@ func (o *ServiceObject) String() string {
 	parts := strings.Split(o.Value, "/")
 
 	if len(parts) >= 2 && !regexpPorts.MatchString(parts[1]) {
-		if parts[0] == "icmp" {
+		switch parts[0] {
+		case "icmp":
 			if part1, ok := icmpType[parts[1]]; ok {
 				parts[1] = part1
 			}
-		} else {
-			port, err := net.LookupPort(parts[0], parts[1])
-			if err == nil {
-				parts[1] = strconv.Itoa(port)
+		case "tcp":
+			if part1, ok := tcpType[parts[1]]; ok {
+				parts[1] = part1
+			} else {
+				part1, err := net.LookupPort(parts[0], parts[1])
+				if err == nil {
+					parts[1] = strconv.Itoa(part1)
+				}
+			}
+		case "udp":
+			if part1, ok := udpType[parts[1]]; ok {
+				parts[1] = part1
+			} else {
+				part1, err := net.LookupPort(parts[0], parts[1])
+				if err == nil {
+					parts[1] = strconv.Itoa(part1)
+				}
 			}
 		}
 	}

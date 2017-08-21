@@ -26,7 +26,7 @@ type PhysicalInterfaceCollection struct {
 	SelfLink  string               `json:"selfLink"`
 }
 
-// Interface represents an interface.
+// PhysicalInterface represents an interface.
 type PhysicalInterface struct {
 	HardwareID        string     `json:"hardwareID"`
 	InterfaceDesc     string     `json:"interfaceDesc"`
