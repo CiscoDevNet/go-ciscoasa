@@ -36,3 +36,29 @@ var icmpType = map[string]string{
 	"conversion-error":     "31",
 	"mobile-redirect":      "32",
 }
+
+var tcpType = map[string]string{
+	"imap4":           "143",
+	"pim-auto-rp":     "496",
+	"rsh":             "514",
+	"lpd":             "515",
+	"kerberos":        "750",
+	"lotusnotes":      "1352",
+	"citrix-ica":      "1494",
+	"sqlnet":          "1521",
+	"h323":            "1720",
+	"ctiqbe":          "2748",
+	"pcanywhere-data": "5631",
+}
+
+var udpType = map[string]string{
+	"dnsix":             "195",
+	"mobile-ip":         "434",
+	"pim-auto-rp":       "496",
+	"rip":               "520",
+	"kerberos":          "750",
+	"radius":            "1645",
+	"radius-acct":       "1646",
+	"secureid-udp":      "5510",
+	"pcanywhere-status": "5632",
+}
