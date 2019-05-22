@@ -145,6 +145,7 @@ func (c *Client) newRequest(method string, api string, v interface{}) (*http.Req
 
 	req.Close = true
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("User-Agent", "REST API Agent")
 	req.SetBasicAuth(c.username, c.password)
 
 	return req, nil
