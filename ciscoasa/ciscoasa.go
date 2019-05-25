@@ -43,7 +43,6 @@ type Client struct {
 	baseURL   *url.URL
 	username  string
 	password  string
-	authToken string
 	pageLimit int
 
 	Access     *accessService
