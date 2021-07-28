@@ -1,3 +1,3 @@
 module github.com/xanzy/go-ciscoasa
 
-go 1.12
+go 1.16
