@@ -71,9 +71,9 @@ func (s *objectsService) ListNetworkServices() (*NetworkServiceCollection, error
 
 // CreateNetworkService creates a new network service.
 func (s *objectsService) CreateNetworkService(name, description, service string) (*NetworkService, error) {
-	u := "/api/objects/networkobjectgroups"
+	u := "/api/objects/networkservices"
 
-	o, err := s.objectFromService(service)
+	o, err := s.kindFromService(service)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,6 @@ func (s *objectsService) CreateNetworkService(name, description, service string)
 		Description: description,
 		Value:       o.Value,
 		Kind:        o.Kind,
-		ObjectID:    o.ObjectID,
 	}
 
 	req, err := s.newRequest("POST", u, n)
@@ -118,7 +117,7 @@ func (s *objectsService) GetNetworkService(name string) (*NetworkService, error)
 func (s *objectsService) UpdateNetworkService(name, description, service string) (*NetworkService, error) {
 	u := fmt.Sprintf("/api/objects/networkservices/%s", name)
 
-	o, err := s.objectFromService(service)
+	o, err := s.kindFromService(service)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +127,6 @@ func (s *objectsService) UpdateNetworkService(name, description, service string)
 		Description: description,
 		Value:       o.Value,
 		Kind:        o.Kind,
-		ObjectID:    o.ObjectID,
 	}
 
 	req, err := s.newRequest("PUT", u, n)
