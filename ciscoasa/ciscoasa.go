@@ -51,6 +51,9 @@ type Client struct {
 	Routing     *routingService
 	DeviceSetup *devicesetupService
 	Dhcp        *dhcpService
+	Nat         *natService
+	Failover    *failoverService
+	Licensing   *licenseService
 }
 
 // ErrorResponse represents an error response
@@ -99,13 +102,13 @@ func NewClient(apiURL, username, password string, sslNoVerify bool) (*Client, er
 			Transport: &http.Transport{
 				Proxy: http.ProxyFromEnvironment,
 				Dial: (&net.Dialer{
-					Timeout:   30 * time.Second,
+					Timeout:   300 * time.Second,
 					KeepAlive: 30 * time.Second,
 				}).Dial,
 				TLSClientConfig:     &tls.Config{InsecureSkipVerify: sslNoVerify},
-				TLSHandshakeTimeout: 10 * time.Second,
+				TLSHandshakeTimeout: 180 * time.Second,
 			},
-			Timeout: 60 * time.Second,
+			Timeout: 300 * time.Second,
 		},
 		baseURL:   baseURL,
 		username:  username,
@@ -119,6 +122,9 @@ func NewClient(apiURL, username, password string, sslNoVerify bool) (*Client, er
 	c.Routing = &routingService{c}
 	c.DeviceSetup = &devicesetupService{c}
 	c.Dhcp = &dhcpService{c}
+	c.Nat = &natService{c}
+	c.Failover = &failoverService{c}
+	c.Licensing = &licenseService{c}
 
 	return c, nil
 }
