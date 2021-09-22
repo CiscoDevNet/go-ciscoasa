@@ -45,11 +45,11 @@ type Client struct {
 	password  string
 	pageLimit int
 
-	Access      *accessService
-	Interfaces  *interfaceService
-	Objects     *objectsService
-	Routing     *routingService
-	Save *saveService
+	Access     *accessService
+	Interfaces *interfaceService
+	Objects    *objectsService
+	Routing    *routingService
+	Save       *saveService
 }
 
 // ErrorResponse represents an error response
