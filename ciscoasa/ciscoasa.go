@@ -45,10 +45,11 @@ type Client struct {
 	password  string
 	pageLimit int
 
-	Access     *accessService
-	Interfaces *interfaceService
-	Objects    *objectsService
-	Routing    *routingService
+	Access      *accessService
+	Interfaces  *interfaceService
+	Objects     *objectsService
+	Routing     *routingService
+	SaveService *saveService
 }
 
 // ErrorResponse represents an error response
@@ -115,6 +116,7 @@ func NewClient(apiURL, username, password string, sslNoVerify bool) (*Client, er
 	c.Interfaces = &interfaceService{c}
 	c.Objects = &objectsService{c}
 	c.Routing = &routingService{c}
+	c.SaveService = &saveService{c}
 
 	return c, nil
 }
