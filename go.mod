@@ -1,3 +1,3 @@
-module github.com/xanzy/go-ciscoasa
+module github.com/CiscoDevNet/go-ciscoasa
 
 go 1.16
